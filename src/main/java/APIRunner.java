@@ -1,6 +1,9 @@
 import com.google.gson.Gson;
 import spark.Filter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static spark.Spark.port;
 import static spark.Spark.*;
 
@@ -56,5 +59,27 @@ public class APIRunner {
             return song;
         }, gson::toJson);
 
+        post("/listofstops/:stopname",(req, res) -> {
+
+            getDestinationList(req.params(":stopname"));
+
+            return null;
+        });
+
+}
+
+    public static String getDestinationList(String input){
+        get("https://api.resrobot.se/v2/location.name?input="+input +"&format=json&key=???",((request, response) ->{
+            ArrayList<DestinationStop> destinationStopList = new ArrayList<>();
+            DestinationStop destinationStop = new DestinationStop();
+
+
+
+
+            return null;
+        } ));
+
+      return null;
     }
 }
+
