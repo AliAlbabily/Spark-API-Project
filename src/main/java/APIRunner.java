@@ -1,13 +1,10 @@
 import com.google.gson.Gson;
-import spark.Filter;
 
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 import static spark.Spark.port;
 import static spark.Spark.*;
@@ -78,5 +75,18 @@ public class APIRunner {
             return response.body();
         });
 
+        get("/originid/*/destid/*",(req, res) -> {
+
+            System.out.println(req.splat()[0]);
+            System.out.println(req.splat()[1]);
+
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
+                    .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.body();
+        });
     }
 }
