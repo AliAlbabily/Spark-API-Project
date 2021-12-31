@@ -1,8 +1,10 @@
 import com.google.gson.Gson;
-import spark.Filter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.CookieManager;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import static spark.Spark.port;
 import static spark.Spark.*;
@@ -43,6 +45,8 @@ public class APIRunner {
 
         Gson gson = new Gson();
 
+        final HttpClient client = HttpClient.newBuilder().cookieHandler(new CookieManager()).build();
+
         // FIXME :
         enableCORS("*", "GET", "");
 
@@ -59,27 +63,30 @@ public class APIRunner {
             return song;
         }, gson::toJson);
 
-        post("/listofstops/:stopname",(req, res) -> {
+        get("/listofstops/:stopname",(req, res) -> {
 
-            getDestinationList(req.params(":stopname"));
+            // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=???"))
+                    .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return null;
+            return response.body();
         });
 
-}
+        get("/originid/*/destid/*",(req, res) -> {
 
-    public static String getDestinationList(String input){
-        get("https://api.resrobot.se/v2/location.name?input="+input +"&format=json&key=???",((request, response) ->{
-            ArrayList<DestinationStop> destinationStopList = new ArrayList<>();
-            DestinationStop destinationStop = new DestinationStop();
+            System.out.println(req.splat()[0]);
+            System.out.println(req.splat()[1]);
 
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
+                    .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-
-            return null;
-        } ));
-
-      return null;
+            return response.body();
+        });
     }
 }
-
