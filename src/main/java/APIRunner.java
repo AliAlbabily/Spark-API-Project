@@ -1,6 +1,11 @@
 import com.google.gson.Gson;
 import spark.Filter;
 
+import java.net.CookieManager;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +48,8 @@ public class APIRunner {
 
         Gson gson = new Gson();
 
+        final HttpClient client = HttpClient.newBuilder().cookieHandler(new CookieManager()).build();
+
         // FIXME :
         enableCORS("*", "GET", "");
 
@@ -59,27 +66,17 @@ public class APIRunner {
             return song;
         }, gson::toJson);
 
-        post("/listofstops/:stopname",(req, res) -> {
+        get("/listofstops/:stopname",(req, res) -> {
 
-            getDestinationList(req.params(":stopname"));
+            // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=???"))
+                    .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return null;
+            return response.body();
         });
 
-}
-
-    public static String getDestinationList(String input){
-        get("https://api.resrobot.se/v2/location.name?input="+input +"&format=json&key=???",((request, response) ->{
-            ArrayList<DestinationStop> destinationStopList = new ArrayList<>();
-            DestinationStop destinationStop = new DestinationStop();
-
-
-
-
-            return null;
-        } ));
-
-      return null;
     }
 }
-
