@@ -41,29 +41,29 @@
                 <p> Tjänstens syfte är att skapa en spellista på Spotify som är unik för en specifik resa/sträcka. Genom att söka efter en resa i formuläret nedan så genererar tjänsten en spellista som motsvarar restiden. Testa gärna! </p>
                 <br>
                 <br>
-                <form id="searchStopsForm" action="" method="POST"> 
+                <form id="searchStopsForm" action="" method="GET">
                     <fieldset>
                         <legend>Sök efter hållplatser!</legend>
                         <p>
-                            <label for="Hållplatser1">Från hållplats: </label>
-                            <input type="text" name="hållplats2" id="Hållplatser1" placeholder="skriv hållplatsen här!" required>
+                            <label for="hållplats1">Från hållplats: </label>
+                            <input type="text" name="hållplats2" id="hållplats1" placeholder="skriv hållplatsen här!" required>
                        </p>
                         <p>
-                            <label for="Hållplatser2">Till hållplats:</label>
-                            <input type="text" name="hållplats2" id="Hållplatser2" placeholder="skriv hållplatsen här!" required>
+                            <label for="hållplats2">Till hållplats:</label>
+                            <input type="text" name="hållplats2" id="hållplats2" placeholder="skriv hållplatsen här!" required>
                         </p>
-                        <p>
-                            <label for="genre">Välj en musikgenre:</label>
-                            <select id="genre" name="genre">
-                            <option value="Hip-Hop">Hip-Hop</option>
-                            <option value="Pop">Pop</option>
-                            <option value="Rock">Rock</option>
-                            <option value="R&B">R&B</option>
-                            </select>
-                        </p>
-                       
-                
-                       <input type="button" class="btn btn-secondary" id="sendStopsIdBtn" value="Sök resa!">
+
+<!--                        <p>-->
+<!--                            <label for="genre">Välj en musikgenre:</label>-->
+<!--                            <select id="genre" name="genre">-->
+<!--                            <option value="Hip-Hop">Hip-Hop</option>-->
+<!--                            <option value="Pop">Pop</option>-->
+<!--                            <option value="Rock">Rock</option>-->
+<!--                            <option value="R&B">R&B</option>-->
+<!--                            </select>-->
+<!--                        </p>-->
+
+                       <input type="submit" class="btn btn-secondary" id="sendStopsIdBtn" value="Sök resa!">
                     </fieldset>
                 </form>
                 <br>
