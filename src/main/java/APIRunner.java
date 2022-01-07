@@ -77,9 +77,6 @@ public class APIRunner {
 
         get("/originid/*/destid/*",(req, res) -> {
 
-            System.out.println(req.splat()[0]);
-            System.out.println(req.splat()[1]);
-
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
                     .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
