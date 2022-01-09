@@ -26,7 +26,6 @@ document.getElementById('searchTrips').addEventListener('click', async function(
 
     var text1 = document.getElementById("hållplats1").value;
     var text2 = document.getElementById("hållplats2").value;
-
     let stopName1 = text1.replace(/ /g, ""); // remove spaces
     let stopName2 = text2.replace(/ /g, ""); // remove spaces
 
@@ -34,5 +33,22 @@ document.getElementById('searchTrips').addEventListener('click', async function(
     const response2 = await searchStop(stopName2);
 
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
-    console.log(trips);
+
+    var tripsContainer = document.getElementById("exampleDataContainer");
+
+    for (let i = 0; i < trips.Trip.length; i++) {
+        let arrivalTime = trips.Trip[i].LegList.Leg[0].Destination.time;
+        let departureTime = trips.Trip[i].LegList.Leg[0].Origin.time;
+        let wayToTravel = trips.Trip[i].LegList.Leg[0].name
+
+        var trip = document.createElement('div');
+        trip.innerHTML = `
+            <p>
+                <b>Avgångstid:</b> ${departureTime} /
+                <b>Ankomsttid:</b> ${arrivalTime} /
+                <b>Sätt att resa:</b> ${wayToTravel}
+            </p>
+        `;
+        tripsContainer.appendChild(trip);
+    }
 });
