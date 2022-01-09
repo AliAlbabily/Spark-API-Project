@@ -1,5 +1,8 @@
 import com.google.gson.Gson;
 
+import org.eclipse.jetty.client.api.Response;
+
+import spark.Request;
 import spark.Route;
 
 import java.net.CookieManager;
@@ -103,7 +106,18 @@ public class APIRunner {
             return response.body();
             });
 
-       
+            //genre från lastFM
+        get("/gettracks/:genre",(req, res) -> {
+
+            final HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=92a40e6574aee18bb56d0090efbd0539&format=json"))
+            .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        });    
     }
+
+   
   
 }
