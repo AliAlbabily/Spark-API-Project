@@ -1,5 +1,10 @@
 import com.google.gson.Gson;
 
+import org.eclipse.jetty.client.api.Response;
+
+import spark.Request;
+import spark.Route;
+
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -77,6 +82,9 @@ public class APIRunner {
 
         get("/originid/*/destid/*",(req, res) -> {
 
+            System.out.println(req.splat()[0]);
+            System.out.println(req.splat()[1]);
+
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
                     .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
@@ -85,5 +93,31 @@ public class APIRunner {
 
             return response.body();
         });
+
+        
+         //gettopTracks från lastFM   
+        get("/gettracks",(req, res) -> {
+        
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create("http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=92a40e6574aee18bb56d0090efbd0539&format=json"))
+                    .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+            });
+
+            //genre från lastFM
+        get("/gettracks/:genre",(req, res) -> {
+
+            final HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=92a40e6574aee18bb56d0090efbd0539&format=json"))
+            .build();
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        });    
     }
+
+   
+  
 }
