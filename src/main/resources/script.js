@@ -48,7 +48,7 @@ function displayTrips(data) {
 
         let trip = document.createElement('div');
         trip.innerHTML = `
-            <p>
+            <p class="tripItem" data-id=${estimatedTripTime}>
                 <b>Avgångstid:</b> ${departureTime} |
                 <b>Ankomsttid:</b> ${arrivalTime} |
                 <b>Restid:</b> ${estimatedTripTime/60} min |
@@ -78,3 +78,7 @@ function hmsToSecondsOnly(str) {
 
     return s;
 }
+
+$(document).on("click",".tripItem", function () {
+    console.log( parseInt($(this).attr("data-id")) );
+});
