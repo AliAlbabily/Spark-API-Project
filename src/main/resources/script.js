@@ -6,7 +6,6 @@ async function searchStop(stopName) {
         headers: {"Accept": "application/json"}
     })
 
-    console.log(result);
     return result;
 }
 
@@ -33,22 +32,48 @@ document.getElementById('searchTrips').addEventListener('click', async function(
     const response2 = await searchStop(stopName2);
 
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
+    displayTrips(trips);
+});
 
-    var tripsContainer = document.getElementById("exampleDataContainer");
+// visa resorna på sidan
+function displayTrips(data) {
+    let tripsContainer = document.getElementById("tripsDataContainer");
 
-    for (let i = 0; i < trips.Trip.length; i++) {
-        let arrivalTime = trips.Trip[i].LegList.Leg[0].Destination.time;
-        let departureTime = trips.Trip[i].LegList.Leg[0].Origin.time;
-        let wayToTravel = trips.Trip[i].LegList.Leg[0].name
+    for (let i = 0; i < data.Trip.length; i++) {
+        let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
+        let departureTime = data.Trip[i].LegList.Leg[0].Origin.time;
+        let wayToTravel = data.Trip[i].LegList.Leg[0].name
+        let estimatedTripTime = calculateTripTime(arrivalTime, departureTime); // i sekunder
 
-        var trip = document.createElement('div');
+        let trip = document.createElement('div');
         trip.innerHTML = `
             <p>
-                <b>Avgångstid:</b> ${departureTime} /
-                <b>Ankomsttid:</b> ${arrivalTime} /
+                <b>Avgångstid:</b> ${departureTime} |
+                <b>Ankomsttid:</b> ${arrivalTime} |
+                <b>Restid:</b> ${estimatedTripTime/60} min |
                 <b>Sätt att resa:</b> ${wayToTravel}
             </p>
         `;
         tripsContainer.appendChild(trip);
     }
-});
+}
+
+function calculateTripTime(arrivalTimeStr, departureTimeStr) {
+    let arrivalTime = hmsToSecondsOnly(arrivalTimeStr);
+    let departureTime = hmsToSecondsOnly(departureTimeStr);
+    let travelTimeInSeconds = arrivalTime - departureTime;
+
+    return travelTimeInSeconds;
+}
+
+function hmsToSecondsOnly(str) {
+    var p = str.split(':'),
+        s = 0, m = 1;
+
+    while (p.length > 0) {
+        s += m * parseInt(p.pop(), 10);
+        m *= 60;
+    }
+
+    return s;
+}
