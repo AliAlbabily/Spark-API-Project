@@ -38,6 +38,7 @@ document.getElementById('searchTrips').addEventListener('click', async function(
 // visa resorna på sidan
 function displayTrips(data) {
     let tripsContainer = document.getElementById("tripsDataContainer");
+    $(tripsContainer).html(""); // radera gammal data på sidan
 
     for (let i = 0; i < data.Trip.length; i++) {
         let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
