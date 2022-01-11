@@ -1,3 +1,5 @@
+var tripDuration;
+
 
 async function searchStop(stopName) {
     const result = await $.ajax({
@@ -19,6 +21,16 @@ async function searchTrips(stopName1, stopName2) {
     return result;
 }
 
+async function getTracks(){
+    const playlist = await $.ajax({
+        method : "GET",
+        url: "http://localhost:5000/gettracks",
+        headers: {"Accept" : "application/json"}
+    });
+
+    return playlist;
+}
+
 // sök resor
 document.getElementById('searchTrips').addEventListener('click', async function(event) {
     event.preventDefault();
@@ -32,7 +44,10 @@ document.getElementById('searchTrips').addEventListener('click', async function(
     const response2 = await searchStop(stopName2);
 
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
+
+    //TEST
     displayTrips(trips);
+
 });
 
 // visa resorna på sidan
@@ -59,11 +74,44 @@ function displayTrips(data) {
     }
 }
 
+//visa låtar och minut på sidan
+function displayTracks(data){
+    var  totalSongDuration = 0;
+    let tracksContainer = document.getElementById("tracksDataContainer");
+    $(tracksContainer).html(""); // radera gammal data på sidan
+
+    for(let i = 0;  i < data.tracks.track.length; i++){
+        let songName = data.tracks.track[i].name;
+        let artist = data.tracks.track[i].artist.name; 
+        
+        if(data.tracks.track[i].duration != 0){
+             var songDuration = data.tracks.track[i].duration;
+             var parseIntDuration = parseInt(songDuration); 
+             totalSongDuration += parseIntDuration;
+
+             if(totalSongDuration < tripDuration){
+                console.log(totalSongDuration+" TOTAL SONG DURATIN"); 
+                let playlist = document.createElement('div');
+                playlist.innerHTML = `
+                    <p
+                        <b>Längd:</b> ${songDuration} |
+                        <b>Artist:</b> ${artist} |
+                        <b>Låt:</b> ${songName} |
+                    </p>
+                `;
+                tracksContainer.appendChild(playlist);   
+             } 
+             }
+    }
+}
+
+
+
+
 function calculateTripTime(arrivalTimeStr, departureTimeStr) {
     let arrivalTime = hmsToSecondsOnly(arrivalTimeStr);
     let departureTime = hmsToSecondsOnly(departureTimeStr);
     let travelTimeInSeconds = arrivalTime - departureTime;
-
     return travelTimeInSeconds;
 }
 
@@ -75,10 +123,19 @@ function hmsToSecondsOnly(str) {
         s += m * parseInt(p.pop(), 10);
         m *= 60;
     }
-
     return s;
 }
 
 $(document).on("click",".tripItem", function () {
-    console.log( parseInt($(this).attr("data-id")) );
+    tripDuration = parseInt($(this).attr("data-id"));
 });
+
+
+
+document.getElementById("getPlaylist").addEventListener('click',async function(event){
+    event.preventDefault();
+    const playlist = await getTracks();
+    displayTracks(playlist);
+    });
+
+    
