@@ -73,7 +73,7 @@ public class APIRunner {
             // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=a3117048-d82b-4122-9c2f-36cfaabbb450"))
+                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=???"))
                     .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -87,7 +87,7 @@ public class APIRunner {
 
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=a3117048-d82b-4122-9c2f-36cfaabbb450"))
+                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
                     .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -100,7 +100,7 @@ public class APIRunner {
         
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=92a40e6574aee18bb56d0090efbd0539&format=json&limit=300"))
+                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=???&format=json&limit=300"))
                     .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
@@ -108,10 +108,9 @@ public class APIRunner {
 
             //genre från lastFM
         get("/gettracks/:genre",(req, res) -> {
-
             final HttpRequest request = HttpRequest.newBuilder()
             .GET()
-            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=92a40e6574aee18bb56d0090efbd0539&format=json"))
+            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=???&format=json"))
             .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();

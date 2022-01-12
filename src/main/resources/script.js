@@ -31,6 +31,16 @@ async function getTracks(){
     return playlist;
 }
 
+async function getTracksByGenre(genre){
+    const genrePlaylist = await $.ajax({
+        method: "GET",
+        url: "http://localhost:5000/gettracks/"+genre,
+        headers: {"Accept": "application/json"}
+    });
+
+    return genrePlaylist;
+}
+
 // sök resor
 document.getElementById('searchTrips').addEventListener('click', async function(event) {
     event.preventDefault();
@@ -90,7 +100,7 @@ function displayTracks(data){
              totalSongDuration += parseIntDuration;
 
              if(totalSongDuration < tripDuration){
-                console.log(totalSongDuration+" TOTAL SONG DURATIN"); 
+                console.log(totalSongDuration+" TOTAL SONG DURATION"); 
                 let playlist = document.createElement('div');
                 playlist.innerHTML = `
                     <p
@@ -103,6 +113,30 @@ function displayTracks(data){
              } 
              }
     }
+}
+
+function displayTracksByGenre(data){
+    let tracksContainer = document.getElementById("tracksDataContainer");
+    $(tracksContainer).html(""); // radera gammal data på sidan
+
+    for(let i = 0; i<data.results.albummatches.album.length; i++){
+        let albumName = data.results.albummatches.album[i].name;
+        let artist = data.results.albummatches.album[i].artist;
+        let playlistURL = data.results.albummatches.album[i].url;
+
+        let genrePlaylist = document.createElement('div');
+
+        genrePlaylist.innerHTML = `
+        <p
+            <b>Album:</b> ${albumName} |
+            <b>Artist:</b> ${artist} |
+            <b>url:</b> ${playlistURL}
+        </p>
+    `;
+    tracksContainer.appendChild(genrePlaylist);
+    }
+
+
 }
 
 
@@ -139,9 +173,22 @@ $(document).on("click",".tripItem", function () {
 
 
 document.getElementById("getPlaylist").addEventListener('click',async function(event){
+
     event.preventDefault();
-    const playlist = await getTracks();
-    displayTracks(playlist);
+    event.preventDefault();
+
+    if(document.getElementById("musicgenre").value){
+        let text1 = document.getElementById("musicgenre").value;
+        let musikgenre = text1.replace(/ /g, "")
+        const playlist = await getTracksByGenre(musikgenre);
+        displayTracksByGenre(playlist);
+    }
+
+    else{
+        const playlist = await getTracks();
+        displayTracks(playlist);
+    }
+         
     });
 
     
