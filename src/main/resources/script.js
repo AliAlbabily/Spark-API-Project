@@ -111,7 +111,13 @@ function displayTracks(data){
 function calculateTripTime(arrivalTimeStr, departureTimeStr) {
     let arrivalTime = hmsToSecondsOnly(arrivalTimeStr);
     let departureTime = hmsToSecondsOnly(departureTimeStr);
-    let travelTimeInSeconds = arrivalTime - departureTime;
+
+    var travelTimeInSeconds = arrivalTime - departureTime;
+
+//Om resan sträcker sig över klockslaget 00
+    if(travelTimeInSeconds < 0){
+      travelTimeInSeconds = 86400 + travelTimeInSeconds;
+    };
     return travelTimeInSeconds;
 }
 

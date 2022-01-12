@@ -100,7 +100,7 @@ public class APIRunner {
         
             final HttpRequest request = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=92a40e6574aee18bb56d0090efbd0539&format=json&limit=100"))
+                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=92a40e6574aee18bb56d0090efbd0539&format=json&limit=300"))
                     .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
