@@ -82,3 +82,18 @@
     padding-left: 500px;
     padding-right: 500px;
 }
+
+#getPlaylist {
+
+    margin-top: 10px;
+}
+
+#tripsDataContainer {
+
+    margin-top: 20px;
+}
+
+#tracksDataContainer {
+
+    margin-top: 20px;
+}
