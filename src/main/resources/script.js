@@ -96,17 +96,20 @@ function displayTracks(data){
         
         if(data.tracks.track[i].duration != 0){
              var songDuration = data.tracks.track[i].duration;
-             var parseIntDuration = parseInt(songDuration); 
+             var songUrl = data.tracks.track[i].url;
+             var parseIntDuration = parseInt(songDuration/60); 
              totalSongDuration += parseIntDuration;
+            
 
-             if(totalSongDuration < tripDuration){
+             if(totalSongDuration < tripDuration/60){
                 console.log(totalSongDuration+" TOTAL SONG DURATION"); 
                 let playlist = document.createElement('div');
                 playlist.innerHTML = `
                     <p
-                        <b>Längd:</b> ${songDuration} |
+                        <b>Längd:</b> ${songDuration/60} min  |
                         <b>Artist:</b> ${artist} |
                         <b>Låt:</b> ${songName} |
+                        <b>Url:</b> ${songUrl}
                     </p>
                 `;
                 tracksContainer.appendChild(playlist);   
