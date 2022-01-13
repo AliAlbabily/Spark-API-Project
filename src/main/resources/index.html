@@ -45,18 +45,19 @@
                     <fieldset>
                         <legend>Sök efter hållplatser!</legend>
                         <p>
-                            <label for="hållplats1">Från hållplats: </label>
+                            <label for="hållplats1">Från hållplats:</label>
                             <input type="text" name="hållplats2" id="hållplats1" placeholder="skriv hållplatsen här!" required>
                        </p>
                         <p>
                             <label for="hållplats2">Till hållplats:</label>
                             <input type="text" name="hållplats2" id="hållplats2" placeholder="skriv hållplatsen här!" required>
 
-
-                    
                         </p>
-                        <label for="musicgenre">Önskad Musik</label>
-                        <input type="text" name = musicgenre id="musicgenre" placeholder = "Skriv önskad musik här! ">
+                        <p>
+                            <label for="musicgenre">Genre: </label>
+                            <input type="text" name = musicgenre id="musicgenre" placeholder = "Skriv önskad genre här! ">
+                        </p>
+                        
 
 <!--                        <p>-->
 <!--                            <label for="genre">Välj en musikgenre:</label>-->
@@ -67,18 +68,24 @@
 <!--                            <option value="R&B">R&B</option>-->
 <!--                            </select>-->
 <!--                        </p>-->
-
-                       <input type="submit" class="btn btn-secondary" id="searchTrips" value="Sök resa!">
+                        <p>
+                            <input type="submit" class="btn btn-secondary" id="searchTrips" value="Sök resa!">
+                        </p>
+                        <p>
+                          <input type="submit" class="btn btn-secondary" id="getPlaylist" value="Skapa spellista!">
+                        </p>
+                       
                     </fieldset>
                 </form>
-
-                <input type="submit" class="btn btn-secondary" id="getPlaylist" value="Skapa spellista!">
-
                 <br>
+                <p><strong>Resor:</strong></p>
 
-                <div id="tripsDataContainer">
+                <div id="tripsDataContainer"></div>
 
-                </div>
+                <p><strong>Låtar:</strong></p>
+
+                <div id="tracksDataContainer"></div>
+
                 
 <!--               <div id="carousel1" class="carousel slide carousel-fade" data-bs-ride="carousel">-->
 <!--                    <div class="carousel-inner">-->
@@ -102,10 +109,8 @@
 <!--                    </button>-->
 <!--                  </div>-->
 
-            
-            <div id="tracksDataContainer">
               
-            </div>
+          
 
             </main>
 <!--            <aside>-->
