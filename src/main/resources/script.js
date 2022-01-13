@@ -63,7 +63,7 @@ document.getElementById('searchTrips').addEventListener('click', async function(
 // visa resorna på sidan
 function displayTrips(data) {
     let tripsContainer = document.getElementById("tripsDataContainer");
-    $(tripsContainer).html(""); // radera gammal data på sidan
+    $(tripsContainer).html( ""); // radera gammal data på sidan
 
     for (let i = 0; i < data.Trip.length; i++) {
         let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
@@ -88,7 +88,7 @@ function displayTrips(data) {
 function displayTracks(data){
     var  totalSongDuration = 0;
     let tracksContainer = document.getElementById("tracksDataContainer");
-    $(tracksContainer).html(""); // radera gammal data på sidan
+    $(tracksContainer).html( ""); // radera gammal data på sidan
 
     for(let i = 0;  i < data.tracks.track.length; i++){
         let songName = data.tracks.track[i].name;
