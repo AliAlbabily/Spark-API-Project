@@ -171,6 +171,7 @@ function hmsToSecondsOnly(str) {
 
 $(document).on("click",".tripItem", function () {
     tripDuration = parseInt($(this).attr("data-id"));
+    alert("The trip was selected.");
 });
 
 
