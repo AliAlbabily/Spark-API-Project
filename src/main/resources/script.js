@@ -105,11 +105,11 @@ function displayTracks(data){
                 console.log(totalSongDuration+" TOTAL SONG DURATION"); 
                 let playlist = document.createElement('div');
                 playlist.innerHTML = `
-                    <p
+                    <p>
                         <b>Längd:</b> ${songDuration/60} min  |
                         <b>Artist:</b> ${artist} |
                         <b>Låt:</b> ${songName} |
-                        <b>Url:</b> ${songUrl}
+                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl}</a>
                     </p>
                 `;
                 tracksContainer.appendChild(playlist);   
@@ -130,10 +130,10 @@ function displayTracksByGenre(data){
         let genrePlaylist = document.createElement('div');
 
         genrePlaylist.innerHTML = `
-        <p
+        <p>
             <b>Album:</b> ${albumName} |
             <b>Artist:</b> ${artist} |
-            <b>url:</b> ${playlistURL}
+            <b>Url:</b> <a href=${playlistURL} target="_blank">${playlistURL}</a>
         </p>
     `;
     tracksContainer.appendChild(genrePlaylist);
