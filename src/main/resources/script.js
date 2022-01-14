@@ -109,7 +109,7 @@ function displayTracks(data){
                         <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min | // visa längden i minuter
                         <b>Artist:</b> ${artist} |
                         <b>Låt:</b> ${songName} |
-                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl}</a>
+                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl.substring(0, 40)}...</a>
                     </p>
                 `;
                 tracksContainer.appendChild(playlist);
@@ -133,7 +133,7 @@ function displayTracksByGenre(data){
         <p>
             <b>Album:</b> ${albumName} |
             <b>Artist:</b> ${artist} |
-            <b>Url:</b> <a href=${playlistURL} target="_blank">${playlistURL}</a>
+            <b>Url:</b> <a href=${playlistURL} target="_blank">${playlistURL.substring(0, 40)}...</a>
         </p>
     `;
     tracksContainer.appendChild(genrePlaylist);
