@@ -95,25 +95,25 @@ function displayTracks(data){
         let artist = data.tracks.track[i].artist.name; 
         
         if(data.tracks.track[i].duration != 0){
-             var songDuration = data.tracks.track[i].duration;
-             var songUrl = data.tracks.track[i].url;
-             var parseIntDuration = parseInt(songDuration/60); 
-             totalSongDuration += parseIntDuration;
-            
+             var songDurationString = data.tracks.track[i].duration; // i sekunder
+             var songDuration = parseInt(songDurationString);
+             var songDurationInMinutes = songDuration/60;
 
-             if(totalSongDuration < tripDuration/60){
-                console.log(totalSongDuration+" TOTAL SONG DURATION"); 
+             var songUrl = data.tracks.track[i].url;
+             totalSongDuration += songDuration;
+
+             if(totalSongDuration < tripDuration){ // jämför i sekunder
                 let playlist = document.createElement('div');
                 playlist.innerHTML = `
-                    <p
-                        <b>Längd:</b> ${songDuration/60} min  |
+                    <p>
+                        <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min | // visa längden i minuter
                         <b>Artist:</b> ${artist} |
                         <b>Låt:</b> ${songName} |
-                        <b>Url:</b> ${songUrl}
+                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl.substring(0, 40)}...</a>
                     </p>
                 `;
-                tracksContainer.appendChild(playlist);   
-             } 
+                tracksContainer.appendChild(playlist);
+             }
              }
     }
 }
@@ -130,10 +130,10 @@ function displayTracksByGenre(data){
         let genrePlaylist = document.createElement('div');
 
         genrePlaylist.innerHTML = `
-        <p
+        <p>
             <b>Album:</b> ${albumName} |
             <b>Artist:</b> ${artist} |
-            <b>url:</b> ${playlistURL}
+            <b>Url:</b> <a href=${playlistURL} target="_blank">${playlistURL.substring(0, 40)}...</a>
         </p>
     `;
     tracksContainer.appendChild(genrePlaylist);
@@ -171,6 +171,7 @@ function hmsToSecondsOnly(str) {
 
 $(document).on("click",".tripItem", function () {
     tripDuration = parseInt($(this).attr("data-id"));
+    alert("The trip was selected.");
 });
 
 
