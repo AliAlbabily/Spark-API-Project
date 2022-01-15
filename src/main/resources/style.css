@@ -50,8 +50,9 @@
 #Wrapper > footer {
     grid-area: footer;
     text-align: center;
+    color: white;
     background-color: cornflowerblue;
-    
+    padding: 6px;
 }
 
 #searchStopsForm {
@@ -96,4 +97,19 @@
 #tracksDataContainer {
 
     margin-top: 20px;
+}
+
+.tripItem {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tripItem:hover {
+    background-color: #a4b9de;
+}
+
+.stylishDiv {
+    padding: 8px 16px;
+    text-align: center;
+    border: solid 2px cornflowerblue;
 }
