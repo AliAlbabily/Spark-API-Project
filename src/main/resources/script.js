@@ -54,10 +54,7 @@ document.getElementById('searchTrips').addEventListener('click', async function(
     const response2 = await searchStop(stopName2);
 
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
-
-    //TEST
     displayTrips(trips);
-
 });
 
 // visa resorna på sidan
@@ -169,16 +166,17 @@ function hmsToSecondsOnly(str) {
     return s;
 }
 
-$(document).on("click",".tripItem", function () {
+$(document).on("click",".tripItem", async function () {
     tripDuration = parseInt($(this).attr("data-id"));
-    alert("The trip was selected.");
+    alert("The trip was selected. A playlist will show up in a few seconds.");
+
+    const playlist = await getTracks();
+    displayTracks(playlist);
 });
 
 
 
 document.getElementById("getPlaylist").addEventListener('click',async function(event){
-
-    event.preventDefault();
     event.preventDefault();
 
     if(document.getElementById("musicgenre").value){
@@ -187,12 +185,6 @@ document.getElementById("getPlaylist").addEventListener('click',async function(e
         const playlist = await getTracksByGenre(musikgenre);
         displayTracksByGenre(playlist);
     }
-
-    else{
-        const playlist = await getTracks();
-        displayTracks(playlist);
-    }
-         
-    });
+});
 
     
