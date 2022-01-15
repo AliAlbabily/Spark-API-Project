@@ -106,3 +106,9 @@
 .tripItem:hover {
     background-color: #a4b9de;
 }
+
+.stylishDiv {
+    padding: 8px 16px;
+    text-align: center;
+    background-color: #a7b8d8;
+}
