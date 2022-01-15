@@ -45,6 +45,8 @@ async function getTracksByGenre(genre){
 document.getElementById('searchTrips').addEventListener('click', async function(event) {
     event.preventDefault();
 
+    smoothScrollToElement("#tripsDataHeader");
+
     var text1 = document.getElementById("hållplats1").value;
     var text2 = document.getElementById("hållplats2").value;
     let stopName1 = text1.replace(/ /g, ""); // remove spaces
@@ -84,6 +86,9 @@ function displayTrips(data) {
 //visa låtar och minut på sidan
 function displayTracks(data){
     var  totalSongDuration = 0;
+
+    smoothScrollToElement("#tracksDataHeader");
+
     let tracksContainer = document.getElementById("tracksDataContainer");
     $(tracksContainer).html( ""); // radera gammal data på sidan
 
@@ -116,6 +121,8 @@ function displayTracks(data){
 }
 
 function displayTracksByGenre(data){
+    smoothScrollToElement("#tracksDataHeader");
+
     let tracksContainer = document.getElementById("tracksDataContainer");
     $(tracksContainer).html(""); // radera gammal data på sidan
 
@@ -187,4 +194,6 @@ document.getElementById("getPlaylist").addEventListener('click',async function(e
     }
 });
 
-    
+function smoothScrollToElement(element) {
+    $('html,body').animate({scrollTop: $(element).offset().top}, 'slow');
+}
