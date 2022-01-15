@@ -97,3 +97,12 @@
 
     margin-top: 20px;
 }
+
+.tripItem {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tripItem:hover {
+    background-color: #a4b9de;
+}
