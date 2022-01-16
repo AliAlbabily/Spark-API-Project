@@ -45,6 +45,8 @@ async function getTracksByGenre(genre){
 document.getElementById('searchTrips').addEventListener('click', async function(event) {
     event.preventDefault();
 
+    $("#tripsDataContainer").html(""); // radera gammal data på sidan
+    displayLoadingIcon("#tripsLoadingContainer");
     smoothScrollToElement("#tripsDataHeader");
 
     var text1 = document.getElementById("hållplats1").value;
@@ -57,12 +59,13 @@ document.getElementById('searchTrips').addEventListener('click', async function(
 
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
     displayTrips(trips);
+
+    hideLoadingIcon("#tripsLoadingContainer");
 });
 
 // visa resorna på sidan
 function displayTrips(data) {
     let tripsContainer = document.getElementById("tripsDataContainer");
-    $(tripsContainer).html( ""); // radera gammal data på sidan
 
     for (let i = 0; i < data.Trip.length; i++) {
         let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
@@ -86,8 +89,6 @@ function displayTrips(data) {
 //visa låtar och minut på sidan
 function displayTracks(data){
     var  totalSongDuration = 0;
-
-    smoothScrollToElement("#tracksDataHeader");
 
     let tracksContainer = document.getElementById("tracksDataContainer");
     $(tracksContainer).html( ""); // radera gammal data på sidan
@@ -121,10 +122,7 @@ function displayTracks(data){
 }
 
 function displayTracksByGenre(data){
-    smoothScrollToElement("#tracksDataHeader");
-
     let tracksContainer = document.getElementById("tracksDataContainer");
-    $(tracksContainer).html(""); // radera gammal data på sidan
 
     for(let i = 0; i<data.results.albummatches.album.length; i++){
         let albumName = data.results.albummatches.album[i].name;
@@ -177,6 +175,8 @@ $(document).on("click",".tripItem", async function () {
     tripDuration = parseInt($(this).attr("data-id"));
     alert("The trip was selected. A playlist will show up in a few seconds.");
 
+    smoothScrollToElement("#tracksDataHeader");
+
     const playlist = await getTracks();
     displayTracks(playlist);
 });
@@ -186,14 +186,28 @@ $(document).on("click",".tripItem", async function () {
 document.getElementById("getPlaylist").addEventListener('click',async function(event){
     event.preventDefault();
 
+    $("#tracksDataContainer").html(""); // radera gammal data på sidan
+    displayLoadingIcon("#tracksLoadingContainer");
+    smoothScrollToElement("#tracksDataHeader");
+
     if(document.getElementById("musicgenre").value){
         let text1 = document.getElementById("musicgenre").value;
         let musikgenre = text1.replace(/ /g, "")
         const playlist = await getTracksByGenre(musikgenre);
         displayTracksByGenre(playlist);
+
+        hideLoadingIcon("#tracksLoadingContainer");
     }
 });
 
 function smoothScrollToElement(element) {
     $('html,body').animate({scrollTop: $(element).offset().top}, 'slow');
+}
+
+function displayLoadingIcon(element) {
+    $(element).removeClass("hidden");
+}
+
+function hideLoadingIcon(element) {
+    $(element).addClass("hidden");
 }

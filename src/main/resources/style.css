@@ -84,3 +84,11 @@ input[type=text] {
     text-align: center;
     border: solid 2px cornflowerblue;
 }
+
+.laodingImageStyling {
+    width: 8%;
+}
+
+.hidden {
+    display: none;
+}
