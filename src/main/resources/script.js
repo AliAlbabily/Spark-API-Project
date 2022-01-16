@@ -93,7 +93,7 @@ function displayTracks(data){
     let tracksContainer = document.getElementById("tracksDataContainer");
     $(tracksContainer).html( ""); // radera gammal data på sidan
 
-    for(let i = 0;  i < data.tracks.track.length; i++){
+    for(let i = 0;  i < 25; i++){
         let songName = data.tracks.track[i].name;
         let artist = data.tracks.track[i].artist.name; 
         
@@ -109,6 +109,41 @@ function displayTracks(data){
                 let playlist = document.createElement('div');
                 playlist.innerHTML = `
                     <p>
+                        <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min | // visa längden i minuter
+                        <b>Artist:</b> ${artist} |
+                        <b>Låt:</b> ${songName} |
+                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl.substring(0, 40)}...</a>
+                    </p>
+                `;
+                tracksContainer.appendChild(playlist);
+             }
+             }
+    }
+}
+
+
+function displaySecondTracks(data){
+    var  totalSongDuration = 0;
+
+    let tracksContainer = document.getElementById("tracksDataContainer");
+
+    for(let i = 25;  i < data.tracks.track.length; i++){
+        let songName = data.tracks.track[i].name;
+        let artist = data.tracks.track[i].artist.name; 
+        
+        if(data.tracks.track[i].duration != 0){
+             var songDurationString = data.tracks.track[i].duration; // i sekunder
+             var songDuration = parseInt(songDurationString);
+             var songDurationInMinutes = songDuration/60;
+
+             var songUrl = data.tracks.track[i].url;
+             totalSongDuration += songDuration;
+
+             if(totalSongDuration < tripDuration){ // jämför i sekunder
+                let playlist = document.createElement('div');
+                playlist.innerHTML = `
+                    <p>
+                        <b>Andra spellistan:</b> |
                         <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min | // visa längden i minuter
                         <b>Artist:</b> ${artist} |
                         <b>Låt:</b> ${songName} |
@@ -179,6 +214,7 @@ $(document).on("click",".tripItem", async function () {
 
     const playlist = await getTracks();
     displayTracks(playlist);
+    displaySecondTracks(playlist);
 });
 
 
