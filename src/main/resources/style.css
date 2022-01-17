@@ -92,3 +92,10 @@ input[type=text] {
 .hidden {
     display: none;
 }
+
+.stylishPlaylistHeader {
+    color: #5757ff;
+    background-color: aquamarine;
+    padding: 10px;
+    border-radius: 10px;
+}
