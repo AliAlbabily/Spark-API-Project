@@ -107,6 +107,8 @@ function displayTracks(data){
 
              var songUrl = data.tracks.track[i].url;
 
+             totalSongDuration += songDuration;
+
              if(totalSongDuration <= tripDuration){ // jämför i sekunder
                 let currentElement = document.createElement('div');
                 currentElement.innerHTML = `
@@ -120,14 +122,13 @@ function displayTracks(data){
 
                  currentPlaylist.appendChild(currentElement);
                  tracksContainer.appendChild(currentPlaylist);
-
-                 totalSongDuration += songDuration;
              }
              else {
                 totalSongDuration = 0;
                 currentPlaylist = document.createElement('div');
                 currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${++playlistNumber}</h3>`;
              }
+//             console.log("Track time: " + songDuration + ", Current time: " + totalSongDuration + ", Trip duration: " + tripDuration);
         }
     }
 }
