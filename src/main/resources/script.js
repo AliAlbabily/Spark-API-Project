@@ -4,7 +4,10 @@ async function searchStop(stopName) {
     const result = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/listofstops/"+stopName,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     })
 
     return result;
@@ -14,7 +17,10 @@ async function searchTrips(stopName1, stopName2) {
     const result = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/originid/"+stopName1+"/destid/"+stopName2,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     });
 
     return result;
@@ -34,7 +40,10 @@ async function getTracksByGenre(genre){
     const genrePlaylist = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/gettracks/"+genre,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     });
 
     return genrePlaylist;
