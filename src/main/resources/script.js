@@ -1,5 +1,4 @@
 var tripDuration;
-var playlistNumber = 1;
 
 async function searchStop(stopName) {
     const result = await $.ajax({
@@ -89,9 +88,10 @@ function displayTrips(data) {
 //visa låtar och minut på sidan
 function displayTracks(data){
     var totalSongDuration = 0;
+    var playlistNumber = 1;
 
     var currentPlaylist = document.createElement('div'); // playlist container
-    currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${0}</h3>`;
+    currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${playlistNumber}</h3>`;
 
     let tracksContainer = document.getElementById("tracksDataContainer");
     $(tracksContainer).html(""); // radera gammal data på sidan
@@ -126,7 +126,7 @@ function displayTracks(data){
              else {
                 totalSongDuration = 0;
                 currentPlaylist = document.createElement('div');
-                currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${playlistNumber++}</h3>`;
+                currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${++playlistNumber}</h3>`;
              }
         }
     }
