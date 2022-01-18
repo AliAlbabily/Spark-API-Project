@@ -1,11 +1,13 @@
 var tripDuration;
 
-
 async function searchStop(stopName) {
     const result = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/listofstops/"+stopName,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     })
 
     return result;
@@ -15,7 +17,10 @@ async function searchTrips(stopName1, stopName2) {
     const result = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/originid/"+stopName1+"/destid/"+stopName2,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     });
 
     return result;
@@ -35,7 +40,10 @@ async function getTracksByGenre(genre){
     const genrePlaylist = await $.ajax({
         method: "GET",
         url: "http://localhost:5000/gettracks/"+genre,
-        headers: {"Accept": "application/json"}
+        headers: {"Accept": "application/json"},
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Bad request input, please try again!");
+        }
     });
 
     return genrePlaylist;
@@ -88,36 +96,49 @@ function displayTrips(data) {
 
 //visa låtar och minut på sidan
 function displayTracks(data){
-    var  totalSongDuration = 0;
+    var totalSongDuration = 0;
+    var playlistNumber = 1;
+
+    var currentPlaylist = document.createElement('div'); // playlist container
+    currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${playlistNumber}</h3>`;
 
     let tracksContainer = document.getElementById("tracksDataContainer");
-    $(tracksContainer).html( ""); // radera gammal data på sidan
+    $(tracksContainer).html(""); // radera gammal data på sidan
 
-    for(let i = 0;  i < data.tracks.track.length; i++){
+    for(let i = 0;  i < data.tracks.track.length; i++){ // num of tracks
         let songName = data.tracks.track[i].name;
-        let artist = data.tracks.track[i].artist.name; 
+        let artist = data.tracks.track[i].artist.name;
         
-        if(data.tracks.track[i].duration != 0){
+        if(data.tracks.track[i].duration != 0){ // keep all tracks with duration over "0"
              var songDurationString = data.tracks.track[i].duration; // i sekunder
              var songDuration = parseInt(songDurationString);
              var songDurationInMinutes = songDuration/60;
 
              var songUrl = data.tracks.track[i].url;
+
              totalSongDuration += songDuration;
 
-             if(totalSongDuration < tripDuration){ // jämför i sekunder
-                let playlist = document.createElement('div');
-                playlist.innerHTML = `
-                    <p>
-                        <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min | // visa längden i minuter
-                        <b>Artist:</b> ${artist} |
-                        <b>Låt:</b> ${songName} |
-                        <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl.substring(0, 40)}...</a>
-                    </p>
-                `;
-                tracksContainer.appendChild(playlist);
+             if(totalSongDuration <= tripDuration){ // jämför i sekunder
+                let currentElement = document.createElement('div');
+                currentElement.innerHTML = `
+                   <p>
+                       <b>Längd:</b> ${songDurationInMinutes.toFixed(2)} min |
+                       <b>Artist:</b> ${artist} |
+                       <b>Låt:</b> ${songName} |
+                       <b>Url:</b> <a href=${songUrl} target="_blank">${songUrl.substring(0, 40)}...</a>
+                   </p>
+               `;
+
+                 currentPlaylist.appendChild(currentElement);
+                 tracksContainer.appendChild(currentPlaylist);
              }
+             else {
+                totalSongDuration = 0;
+                currentPlaylist = document.createElement('div');
+                currentPlaylist.innerHTML = `<h3 class="stylishPlaylistHeader">Spellista: ${++playlistNumber}</h3>`;
              }
+//             console.log("Track time: " + songDuration + ", Current time: " + totalSongDuration + ", Trip duration: " + tripDuration);
+        }
     }
 }
 
@@ -140,12 +161,7 @@ function displayTracksByGenre(data){
     `;
     tracksContainer.appendChild(genrePlaylist);
     }
-
-
 }
-
-
-
 
 function calculateTripTime(arrivalTimeStr, departureTimeStr) {
     let arrivalTime = hmsToSecondsOnly(arrivalTimeStr);
