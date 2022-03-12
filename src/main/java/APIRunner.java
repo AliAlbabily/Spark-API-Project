@@ -16,6 +16,9 @@ import static spark.Spark.*;
 
 public class APIRunner {
 
+    private static final String lastfmApiKey = System.getenv("LASTFM_API_KEY");
+    private static final String trafiklabApiKey = System.getenv("TRAFIKLAB_API_KEY");
+
     // https://sparkjava.com/tutorials/cors
     // https://stackoverflow.com/questions/45295530/spark-cors-access-control-allow-origin-error
     // Enables CORS on requests. This method is an initialization method and should be called once.
@@ -72,9 +75,9 @@ public class APIRunner {
 
             // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=???"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key="+trafiklabApiKey))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.body();
@@ -86,37 +89,33 @@ public class APIRunner {
             System.out.println(req.splat()[1]);
 
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key="+trafiklabApiKey))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.body();
         });
 
-        
-         //gettopTracks från lastFM   
+        //gettopTracks från lastFM
         get("/gettracks",(req, res) -> {
-        
+
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=???&format=json&limit=200"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key="+lastfmApiKey+"&format=json&limit=200"))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
-            });
+        });
 
-            //genre från lastFM
+        //genre från lastFM
         get("/gettracks/:genre",(req, res) -> {
             final HttpRequest request = HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=???&format=json"))
-            .build();
+                .GET()
+                .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key="+lastfmApiKey+"&format=json"))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
-        });    
+        });
     }
-
-   
-  
 }
