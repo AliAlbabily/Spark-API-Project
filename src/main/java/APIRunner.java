@@ -59,8 +59,6 @@ public class APIRunner {
         }, gson::toJson);
 
         get("/listofstops/:stopname",(req, res) -> {
-
-            // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
             final HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key="+trafiklabApiKey))
@@ -71,10 +69,6 @@ public class APIRunner {
         });
 
         get("/originid/*/destid/*",(req, res) -> {
-
-            System.out.println(req.splat()[0]);
-            System.out.println(req.splat()[1]);
-
             final HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key="+trafiklabApiKey))
@@ -86,7 +80,6 @@ public class APIRunner {
 
         //gettopTracks från lastFM
         get("/gettracks",(req, res) -> {
-
             final HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key="+lastfmApiKey+"&format=json&limit=200"))
