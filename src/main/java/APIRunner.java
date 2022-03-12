@@ -1,10 +1,5 @@
 import com.google.gson.Gson;
 
-import org.eclipse.jetty.client.api.Response;
-
-import spark.Request;
-import spark.Route;
-
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
