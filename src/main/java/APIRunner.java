@@ -19,8 +19,6 @@ public class APIRunner {
     private static final String lastfmApiKey = System.getenv("LASTFM_API_KEY");
     private static final String trafiklabApiKey = System.getenv("TRAFIKLAB_API_KEY");
 
-    // https://sparkjava.com/tutorials/cors
-    // https://stackoverflow.com/questions/45295530/spark-cors-access-control-allow-origin-error
     // Enables CORS on requests. This method is an initialization method and should be called once.
     private static void enableCORS(final String origin, final String methods, final String headers) {
 
@@ -52,17 +50,11 @@ public class APIRunner {
         port(5000);
 
         Gson gson = new Gson();
-
         final HttpClient client = HttpClient.newBuilder().cookieHandler(new CookieManager()).build();
 
-        // FIXME :
         enableCORS("*", "GET", "");
 
-        // req (request) : data som skickas från webbläsaren/klientenD
-        // res (response) : data som skickas tillbaka till webbläsaren/klientenD
-        get("/hello", (req, res) -> "Hello World");
-
-        // TODO : bara ett test
+        // a testing method
         get("/song", (req, res) -> {
             Song song = new Song();
             song.name = "Eye of the tiger";
