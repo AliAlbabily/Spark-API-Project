@@ -1,10 +1,5 @@
 import com.google.gson.Gson;
 
-import org.eclipse.jetty.client.api.Response;
-
-import spark.Request;
-import spark.Route;
-
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,8 +11,9 @@ import static spark.Spark.*;
 
 public class APIRunner {
 
-    // https://sparkjava.com/tutorials/cors
-    // https://stackoverflow.com/questions/45295530/spark-cors-access-control-allow-origin-error
+    private static final String lastfmApiKey = "";
+    private static final String trafiklabApiKey = "";
+
     // Enables CORS on requests. This method is an initialization method and should be called once.
     private static void enableCORS(final String origin, final String methods, final String headers) {
 
@@ -49,17 +45,11 @@ public class APIRunner {
         port(5000);
 
         Gson gson = new Gson();
-
         final HttpClient client = HttpClient.newBuilder().cookieHandler(new CookieManager()).build();
 
-        // FIXME :
         enableCORS("*", "GET", "");
 
-        // req (request) : data som skickas från webbläsaren/klientenD
-        // res (response) : data som skickas tillbaka till webbläsaren/klientenD
-        get("/hello", (req, res) -> "Hello World");
-
-        // TODO : bara ett test
+        // a testing method
         get("/song", (req, res) -> {
             Song song = new Song();
             song.name = "Eye of the tiger";
@@ -69,54 +59,43 @@ public class APIRunner {
         }, gson::toJson);
 
         get("/listofstops/:stopname",(req, res) -> {
-
-            // https://github.com/mthmulders/spark-flash/blob/master/src/test/java/spark/flash/FlashIT.java
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key=???"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://api.resrobot.se/v2/location.name?input="+req.params(":stopname")+"&format=json&key="+trafiklabApiKey))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.body();
         });
 
         get("/originid/*/destid/*",(req, res) -> {
-
-            System.out.println(req.splat()[0]);
-            System.out.println(req.splat()[1]);
-
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key=???"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://api.resrobot.se/v2/trip?format=json&originId="+req.splat()[0]+"&destId="+req.splat()[1]+"&passlist=true&showPassingPoints=true&key="+trafiklabApiKey))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return response.body();
         });
 
-        
-         //gettopTracks från lastFM   
+        //gettopTracks från lastFM
         get("/gettracks",(req, res) -> {
-        
             final HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=???&format=json&limit=200"))
-                    .build();
+                .GET()
+                .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key="+lastfmApiKey+"&format=json&limit=200"))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
-            });
+        });
 
-            //genre från lastFM
+        //genre från lastFM
         get("/gettracks/:genre",(req, res) -> {
             final HttpRequest request = HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key=???&format=json"))
-            .build();
+                .GET()
+                .uri(URI.create("https://ws.audioscrobbler.com/2.0/?method=album.search&album="+req.params(":genre")+"&api_key="+lastfmApiKey+"&format=json"))
+                .build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
-        });    
+        });
     }
-
-   
-  
 }
