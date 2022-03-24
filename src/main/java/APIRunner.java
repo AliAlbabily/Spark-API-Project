@@ -11,8 +11,8 @@ import static spark.Spark.*;
 
 public class APIRunner {
 
-    private static final String lastfmApiKey = System.getenv("LASTFM_API_KEY");
-    private static final String trafiklabApiKey = System.getenv("TRAFIKLAB_API_KEY");
+    private static final String lastfmApiKey = "";
+    private static final String trafiklabApiKey = "";
 
     // Enables CORS on requests. This method is an initialization method and should be called once.
     private static void enableCORS(final String origin, final String methods, final String headers) {
