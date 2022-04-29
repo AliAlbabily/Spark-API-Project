@@ -1,4 +1,6 @@
 var tripDuration;
+var searchedOriginStopID;
+var searchedDestinationStopID;
 
 async function searchStop(stopName) {
     const result = await $.ajax({
@@ -65,6 +67,9 @@ document.getElementById('searchTrips').addEventListener('click', async function(
     const response1 = await searchStop(stopName1);
     const response2 = await searchStop(stopName2);
 
+    searchedOriginStopID = response1.StopLocation[0].id; // capture origin stop ID
+    searchedDestinationStopID = response2.StopLocation[0].id; // capture destination stop ID
+
     const trips = await searchTrips(response1.StopLocation[0].id, response2.StopLocation[0].id);
     displayTrips(trips);
 
@@ -76,21 +81,32 @@ function displayTrips(data) {
     let tripsContainer = document.getElementById("tripsDataContainer");
 
     for (let i = 0; i < data.Trip.length; i++) {
-        let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
-        let departureTime = data.Trip[i].LegList.Leg[0].Origin.time;
-        let wayToTravel = data.Trip[i].LegList.Leg[0].name
-        let estimatedTripTime = calculateTripTime(arrivalTime, departureTime); // i sekunder
+        let currentTripOriginStopID = data.Trip[i].LegList.Leg[0].Origin.id;
+        let currentTripDestinationStopID = data.Trip[i].LegList.Leg[0].Destination.id;
 
-        let trip = document.createElement('div');
-        trip.innerHTML = `
-            <p class="tripItem" data-id=${estimatedTripTime}>
-                <b>Avgångstid:</b> ${departureTime} |
-                <b>Ankomsttid:</b> ${arrivalTime} |
-                <b>Restid:</b> ${estimatedTripTime/60} min |
-                <b>Sätt att resa:</b> ${wayToTravel}
-            </p>
-        `;
-        tripsContainer.appendChild(trip);
+        // find the right trips to display
+        if(currentTripOriginStopID == searchedOriginStopID && currentTripDestinationStopID == searchedDestinationStopID) {
+            let arrivalTime = data.Trip[i].LegList.Leg[0].Destination.time;
+            let departureTime = data.Trip[i].LegList.Leg[0].Origin.time;
+            let wayToTravel = data.Trip[i].LegList.Leg[0].name
+            let estimatedTripTime = calculateTripTime(arrivalTime, departureTime); // i sekunder
+
+            let trip = document.createElement('div');
+            trip.innerHTML = `
+                <p class="tripItem" data-id=${estimatedTripTime}>
+                    <b>Avgångstid:</b> ${departureTime} |
+                    <b>Ankomsttid:</b> ${arrivalTime} |
+                    <b>Restid:</b> ${estimatedTripTime/60} min |
+                    <b>Sätt att resa:</b> ${wayToTravel}
+                </p>
+            `;
+            tripsContainer.appendChild(trip);
+        }
+    }
+
+    // print an error message when no results are found
+    if ( $('#tripsDataContainer').is(':empty') ) {
+        tripsContainer.innerHTML = `Trip not found`;
     }
 }
 
